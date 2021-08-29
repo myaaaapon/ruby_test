@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+  db-data:
+
+services:
+  web:
+    build: .
+    stdin_open: true
+    tty: true
+    ports:
+      - '3000:3000'
+    volumes:
+      - '.:/testapp'
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - 'DATABASE_PASSWORD=postgres'
+
+  db:
+    image: postgres
+    volumes:
+      - 'db-data:/var/lib/postgres/data'
+    environment:
+      - 'POSTGRES_PASSWORD=postgres'
